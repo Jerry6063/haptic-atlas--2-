@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haptic Atlas | Prototyping a Tactile City</title>
+    <meta name="description" content="A design research project exploring wearable haptic feedback for blind and low-vision commuters.">
+    
+    <!-- Fonts: Space Mono (Data/Headers), Inter (Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Graph Libraries: P5 for rendering, D3 for physics -->
+    <!-- Using full D3 build to ensure compatibility with force layout helpers -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+
+    <!-- Fixed Navigation Bar -->
+    <nav class="lab-nav">
+        <div class="nav-left">
+            <span class="logo-text">HAPTIC ATLAS</span>
+            <span class="nav-meta">MSCDP 2023 // COLUMBIA GSAPP</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#hero" class="nav-item">00_Intro</a></li>
+            <li><a href="#project-description" class="nav-item">01_Project</a></li>
+            <li><a href="#methods" class="nav-item">02_Methods</a></li>
+            <li><a href="#proof-of-concept" class="nav-item">03_Prototype</a></li>
+            <li><a href="#data" class="nav-item">04_Data</a></li>
+            <li><a href="#research" class="nav-item">05_Research</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="hero-section">
+        <div id="canvas-container"></div> <!-- Three.js Background -->
+        
+        <div class="hero-overlay grid-12">
+            <div class="hero-title-block">
+                <h1 class="glitch-text">HAPTIC<br>ATLAS</h1>
+                <div class="hero-meta">
+                    <span class="mono-label">RESEARCH THESIS</span>
+                    <span class="mono-label">V.1.0 PROTOTYPE</span>
+                </div>
+            </div>
+            
+            <div class="hero-intro-block">
+                <h2 class="subtitle">Prototyping a Tactile City</h2>
+                <p class="hero-desc">
+                    A design research project exploring how wearable haptic feedback can support blind and low-vision commuters in navigating New York City.
+                </p>
+                <p class="hero-subtext">
+                    Documenting experiments, methods, and prototypes for a speculative ‘tactile layer’ of the urban environment.
+                </p>
+                <a href="#hypothesis" class="lab-btn">Explore Research &darr;</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- HYPOTHESIS -->
+    <section id="hypothesis" class="lab-section border-top">
+        <div class="grid-12">
+            <div class="col-label">
+                <span class="mono-label">00 // HYPOTHESIS</span>
+            </div>
+            <div class="col-content big-text-block">
+                <p class="provocation">
+                    <!-- TODO: refine hypothesis language here -->
+                    “Haptic Atlas asks: How can a wearable haptic system translate urban navigation cues into touch for blind and low-vision travelers moving through the city?”
+                </p>
+                <p class="supporting-text mono-text">
+                    // Treating the city as an information field re-routed from vision and sound into the skin.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECT DESCRIPTION -->
+    <section id="project-description" class="lab-section border-top">
+        <div class="grid-12">
+            <div class="col-label">
+                <span class="mono-label">01 // PROJECT DESCRIPTION</span>
+            </div>
+            <div class="col-main">
+                <h3 class="section-heading">The Commute as Interface</h3>
+                <!-- TODO: replace with final route media and full description -->
+                <p class="body-text">
+                    Haptic Atlas is a research-through-design project that follows a daily commute from Long Island City to Columbia University. It investigates how navigation information—traffic signals, urban landmarks, spatial transitions—is unevenly distributed.
+                </p>
+                <p class="body-text">
+                    The project proposes a wearable haptic belt to translate this visual field into structured tactile patterns.
+                </p>
+                <ul class="lab-list">
+                    <li>Explores gaps in urban accessibility along a real route.</li>
+                    <li>Prototypes a belt-based haptic navigation system.</li>
+                    <li>Frames the city as a multi-sensory interface.</li>
+                </ul>
+            </div>
+            <div class="col-media">
+                <div class="schematic-frame">
+                    <div class="crosshair tl"></div>
+                    <div class="crosshair tr"></div>
+                    <div class="crosshair bl"></div>
+                    <div class="crosshair br"></div>
+                    <span class="frame-label">FIG 1.1 ROUTE DIAGRAM</span>
+                    <div class="placeholder-content">
+                        <!-- TODO: Replace with Image/Video -->
+                        [ PLACEHOLDER: COMMUTE VIDEO / MAP ]
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPUTATIONAL & DESIGN METHODS (Combined Wrapper) -->
+    <section id="methods" class="lab-section border-top">
+        <div class="grid-12">
+            <div class="col-label">
+                <span class="mono-label">02 // METHODS</span>
+            </div>
+            
+            <!-- Computational -->
+            <div class="col-wide">
+                <h3 class="section-heading">Computational Workflow</h3>
+                <p class="body-text">Combining embedded hardware, web visualization, and simulation.</p>
+                
+                <div class="method-grid">
+                    <!-- TODO: expand descriptions -->
+                    <div class="method-card">
+                        <span class="card-idx">01</span>
+                        <h4>Hardware / ESP32</h4>
+                        <p>Driving vibration motors to experiment with haptic patterns and intensity.</p>
+                    </div>
+                    <div class="method-card">
+                        <span class="card-idx">02</span>
+                        <h4>Web Prototypes</h4>
+                        <p>Browser-based tools for mapping haptic cues to geolocation events.</p>
+                    </div>
+                    <div class="method-card">
+                        <span class="card-idx">03</span>
+                        <h4>Data Viz</h4>
+                        <p>Visualizing friction points and moments of confusion during navigation.</p>
+                    </div>
+                    <div class="method-card">
+                        <span class="card-idx">04</span>
+                        <h4>Simulation</h4>
+                        <p>Timeline-based simulation of haptic sensations along a route.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Design Process Timeline -->
+            <div class="col-wide spacer-top">
+                <h3 class="section-heading">Design Process</h3>
+                <div class="timeline-horizontal">
+                    <!-- TODO: link steps to artifacts -->
+                    <div class="timeline-step">
+                        <span class="step-marker"></span>
+                        <span class="step-title">Context Research</span>
+                        <p class="step-desc">Literature review on tactile displays & wayfinding.</p>
+                    </div>
+                    <div class="timeline-step">
+                        <span class="step-marker"></span>
+                        <span class="step-title">Commute Mapping</span>
+                        <p class="step-desc">Documenting friction points on the daily route.</p>
+                    </div>
+                    <div class="timeline-step">
+                        <span class="step-marker"></span>
+                        <span class="step-title">Haptic Grammar</span>
+                        <p class="step-desc">Testing a vocabulary of vibration patterns.</p>
+                    </div>
+                    <div class="timeline-step">
+                        <span class="step-marker"></span>
+                        <span class="step-title">Prototyping</span>
+                        <p class="step-desc">Assembling belt form-factors and control logic.</p>
+                    </div>
+                    <div class="timeline-step">
+                        <span class="step-marker"></span>
+                        <span class="step-title">Speculation</span>
+                        <p class="step-desc">Storyboarding future urban scenarios.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRECEDENTS -->
+    <section id="precedents" class="lab-section border-top">
+        <div class="grid-12">
+            <div class="col-label">
+                <span class="mono-label">02b // PRECEDENTS</span>
+            </div>
+            <div class="col-wide">
+                <div class="precedent-grid">
+                    <!-- TODO: replace with actual citations -->
+                    <article class="precedent-item">
+                        <div class="p-header">
+                            <h4>Wearable Haptic Nav</h4>
+                            <a href="#" class="ref-link">REF &nearr;</a>
+                        </div>
+                        <p>Projects using belts/vests to guide users, often for low-vision navigation.</p>
+                    </article>
+                    <article class="precedent-item">
+                        <div class="p-header">
+                            <h4>Urban Accessibility Maps</h4>
+                            <a href="#" class="ref-link">REF &nearr;</a>
+                        </div>
+                        <p>Mapping curb cuts and tactile paving to reveal spatial inequality.</p>
+                    </article>
+                    <article class="precedent-item">
+                        <div class="p-header">
+                            <h4>Speculative Senses</h4>
+                            <a href="#" class="ref-link">REF &nearr;</a>
+                        </div>
+                        <p>Design works treating the body as a site for new sensory channels.</p>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROOF OF CONCEPT (Highlighted) -->
+    <section id="proof-of-concept" class="lab-section dark-accent border-top">
+        <div class="grid-12">
+            <div class="col-label">
+                <span class="mono-label accent-text">03 // PROTOTYPE</span>
+            </div>
+            <div class="col-main">
+                <h2 class="section-heading">Proof of Concept</h2>
+                <p class="body-text">
+                    Early exploration of a belt device delivering repeatable vibration patterns. Not replacing the white cane, but adding a parallel tactile channel for ‘turn soon’ or ‘stairs ahead’.
+                </p>
+                
+                <!-- Interaction Module -->
+                <div class="interaction-module">
+                    <div class="module-header">
+                        <span class="mono-label">INTERACTIVE SIMULATOR // V.0.1</span>
+                        <div class="status-light"></div>
+                    </div>
+                    
+                    <div class="viz-container" id="haptic-vis">
+                        <div class="viz-grid-lines"></div>
+                        <div class="haptic-actuator"></div>
+                        <div class="feedback-readout mono-text" id="haptic-text">SYSTEM READY. AWAITING INPUT.</div>
+                    </div>
+
+                    <div class="control-panel">
+                        <button class="ctrl-btn" data-pattern="turn-left" data-desc="> LEFT SIDE: SHORT PULSES">
+                            <span class="btn-idx">A</span> TURN LEFT
+                        </button>
+                        <button class="ctrl-btn" data-pattern="turn-right" data-desc="> RIGHT SIDE: SHORT PULSES">
+                            <span class="btn-idx">B</span> TURN RIGHT
+                        </button>
+                        <button class="ctrl-btn" data-pattern="stairs" data-desc="> RHYTHM: UP/DOWN ALTERNATING">
+                            <span class="btn-idx">C</span> STAIRS
+                        </button>
+                        <button class="ctrl-btn" data-pattern="stop" data-desc="> ALERT: CONTINUOUS BUZZ (2s)">
+                            <span class="btn-idx">D</span> INTERSECTION
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-media">
+                <div class="schematic-frame video-height">
+                    <span class="frame-label">FIG 3.1 PROTOTYPE DEMO</span>
+                    <div class="placeholder-content">
+                        <!-- TODO: Replace with Video -->
+                        [ PLACEHOLDER: DEVICE VIDEO ]
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AUDIENCE & DATA (Split) -->
+    <section id="data" class="lab-section border-top">
+        <div class="grid-12">
+            <!-- Audience Column -->
+            <div class="col-half">
+                <span class="mono-label block-mb">04a // AUDIENCE</span>
+                <p class="body-text">
+                    Aimed at blind and low-vision commuters, mobility instructors, and urban planners rethinking how cities communicate.
+                </p>
+                <div class="tag-cloud">
+                    <span class="lab-tag">Low-vision Travelers</span>
+                    <span class="lab-tag">Mobility Instructors</span>
+                    <span class="lab-tag">Urban Planners</span>
+                    <span class="lab-tag">Computational Designers</span>
+                </div>
+            </div>
+            
+            <!-- Data Column -->
+            <div class="col-half">
+                <span class="mono-label block-mb">04b // DATA STRUCTURE</span>
+                <p class="body-text">
+                    Qualitative and spatial data: commute logs, sketches, GPS traces, and friction point mapping.
+                </p>
+                <div class="data-viz-placeholder">
+                    <!-- TODO: Real data graphic -->
+                    <div class="bar-chart">
+                        <div class="bar" style="height:40%"></div>
+                        <div class="bar" style="height:70%"></div>
+                        <div class="bar" style="height:50%"></div>
+                        <div class="bar" style="height:85%"></div>
+                    </div>
+                    <span class="viz-caption mono-text">FIG 4.1 ROUTE FRICTION</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MATERIALS / SPECS -->
+    <section id="materials" class="lab-section border-top bg-darker">
+        <div class="grid-12">
+            <div class="col-label">
+                <span class="mono-label">04c // HARDWARE</span>
+            </div>
+            <div class="col-wide">
+                <div class="spec-table">
+                    <div class="spec-row">
+                        <span class="spec-key">ACTUATORS</span>
+                        <span class="spec-val">Linear Resonant Actuators (LRA) / Coin Motors</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-key">CONTROLLER</span>
+                        <span class="spec-val">ESP32 (WiFi/BLE capable)</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-key">POWER</span>
+                        <span class="spec-val">3.7V LiPo Battery + Regulation</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-key">INTERFACE</span>
+                        <span class="spec-val">Soft Neoprene Belt / Harness</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RESEARCH NETWORK (Connected Papers Style) -->
+    <section id="research" class="lab-section border-top">
+        <div class="grid-12">
+            <div class="col-label">
+                <span class="mono-label">05 // KNOWLEDGE GRAPH</span>
+            </div>
+            
+            <div class="col-wide research-split">
+                <!-- LEFT COLUMN: Reference List -->
+                <div class="research-list" id="ref-list">
+                    <h4 class="mono-label header-mb">CONNECTED PAPERS & DATA</h4>
+                    <div id="ref-list-container"></div>
+                </div>
+
+                <!-- RIGHT COLUMN: Network Graph (p5.js + d3-force) -->
+                <div class="research-graph" id="graph-container-wrapper">
+                    <div class="graph-ui-header">
+                        <div class="legend-item"><span class="dot type-nav"></span> HAPTIC NAV</div>
+                        <div class="legend-item"><span class="dot type-urban"></span> URBAN ACCESS</div>
+                        <div class="legend-item"><span class="dot type-theory"></span> THEORY</div>
+                    </div>
+                    <!-- IMPORTANT: The ID 'network-canvas' is used by p5.js in script.js -->
+                    <div id="network-canvas" class="canvas-wrapper"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer border-top">
+        <div class="grid-12">
+            <div class="col-full center-text">
+                <p class="mono-text">HAPTIC ATLAS // MSCDP 2023</p>
+                <p class="mono-text small">Designed for Columbia GSAPP</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Main Logic -->
+    <script src="script.js"></script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
